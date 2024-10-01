@@ -1,0 +1,96 @@
+basePath: /
+definitions:
+  http.TaskResponse:
+    properties:
+      task_id:
+        type: string
+    type: object
+  http.TaskStatus:
+    properties:
+      status:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: this is a sample server.
+  title: My API
+  version: "1.0"
+paths:
+  /result/{taskID}:
+    get:
+      description: Get a result of task by id
+      parameters:
+      - description: taskID
+        in: path
+        name: taskID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: result of task
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Can't find a task
+          schema:
+            type: string
+      summary: Get a result of task
+      tags:
+      - tasks
+  /server:
+    get:
+      description: create and run http server
+      parameters:
+      - description: Address for run server
+        in: query
+        name: addr
+        required: true
+        type: string
+      responses: {}
+      summary: run server
+      tags:
+      - server
+  /status/{taskID}:
+    get:
+      description: Get a status of task by id
+      parameters:
+      - description: taskID
+        in: path
+        name: taskID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Status of task
+          schema:
+            $ref: '#/definitions/http.TaskStatus'
+        "404":
+          description: Task not found
+          schema:
+            type: string
+      summary: Get a status of task
+      tags:
+      - tasks
+  /task:
+    post:
+      consumes:
+      - application/json
+      description: Create a task and get a taskID
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Task successfully created
+          schema:
+            $ref: '#/definitions/http.TaskResponse'
+      summary: Create a task
+      tags:
+      - tasks
+swagger: "2.0"
